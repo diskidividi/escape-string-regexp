@@ -21,3 +21,11 @@ test('escapes `-` in a way compatible with the Unicode flag', t => {
 		new RegExp(escapeStringRegexp('-'), 'u')
 	);
 });
+
+test('leaves hyphens literal when disabled without skipping other escaping', t => {
+	const input = 'a-b$[c]';
+	const escapedString = escapeStringRegexp(input, false);
+
+	t.is(escapedString, 'a-b\\$\\[c\\]');
+	t.true(new RegExp(`^${escapedString}$`, 'u').test(input));
+});
